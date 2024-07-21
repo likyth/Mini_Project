@@ -1,89 +1,91 @@
 {% extends "layout.html" %}
 {% block title %}Visualize Data{% endblock %}
 {% block content %}
-<h1>Data Visualization</h1>
-<br>
-<br>
-<!-- Chart Type Selection -->
-<h2>Select Chart Type</h2>
-<div class="alert alert-info" role="alert">
-    Select a chart type to visualize the data.
-</div>
-<div class="row">
-    <div class="col-md-3">
-        <div class="card" onclick="selectChartType('bar')">
-            <img src="{{ url_for('static', filename='images/chart_types/bar_chart.png') }}" class="card-img-top" alt="Bar Chart">
-            <div class="card-body">
-                <h5 class="card-title">Bar Chart</h5>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Data Visualization</h1>
+
+    <!-- Chart Type Selection -->
+    <h2 class="mb-4">Select Chart Type</h2>
+    <div class="alert alert-info" role="alert">
+        Select a chart type to visualize the data.
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card h-100" onclick="selectChartType('bar')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/chart_types/bar_chart.png') }}" class="card-img-top" alt="Bar Chart">
+                <div class="card-body">
+                    <h5 class="card-title">Bar Chart</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100" onclick="selectChartType('line')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/chart_types/line_chart.png') }}" class="card-img-top" alt="Line Chart">
+                <div class="card-body">
+                    <h5 class="card-title">Line Chart</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100" onclick="selectChartType('scatter')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/chart_types/scatter_plot.png') }}" class="card-img-top" alt="Scatter Plot">
+                <div class="card-body">
+                    <h5 class="card-title">Scatter Plot</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card h-100" onclick="selectChartType('pie')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/chart_types/pie_chart.png') }}" class="card-img-top" alt="Pie Chart">
+                <div class="card-body">
+                    <h5 class="card-title">Pie Chart</h5>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card" onclick="selectChartType('line')">
-            <img src="{{ url_for('static', filename='images/chart_types/line_chart.png') }}" class="card-img-top" alt="Line Chart">
-            <div class="card-body">
-                <h5 class="card-title">Line Chart</h5>
+
+    <!-- Hidden Input to Store Selected Chart Type -->
+    <input type="hidden" id="chart_type" name="chart_type" value="">
+
+    <!-- Filter Form -->
+    <form method="post" id="filter-form">
+        <div class="form-row mb-4">
+            <div class="form-group col-md-6">
+                <label for="x_input">X Column:</label>
+                <select class="form-control" id="x_input" name="x_input">
+                    {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="y_input">Y Column:</label>
+                <select class="form-control" id="y_input" name="y_input">
+                    {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Visualize</button>
+    </form>
+
+    <!-- Data Preview -->
+    <h2 class="mt-5">Data Preview</h2>
+    <div class="table-responsive">
+        <table id="data-table" class="table table-striped table-bordered">
+            {{ data | safe }}
+        </table>
     </div>
-    <div class="col-md-3">
-        <div class="card" onclick="selectChartType('scatter')">
-            <img src="{{ url_for('static', filename='images/chart_types/scatter_plot.png') }}" class="card-img-top" alt="Scatter Plot">
-            <div class="card-body">
-                <h5 class="card-title">Scatter Plot</h5>
+    <hr>
+
+    <!-- Visualization Display -->
+    <h2 class="mt-5">Visualization</h2>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                {{ graph_html | safe }}
             </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card" onclick="selectChartType('pie')">
-            <img src="{{ url_for('static', filename='images/chart_types/pie_chart.png') }}" class="card-img-top" alt="Pie Chart">
-            <div class="card-body">
-                <h5 class="card-title">Pie Chart</h5>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Hidden Input to Store Selected Chart Type -->
-<input type="hidden" id="chart_type" name="chart_type" value="">
-
-<!-- Filter Form -->
-<form method="post" id="filter-form">
-    <div class="form-group">
-        <label for="x_input">X Column:</label>
-        <select class="form-control" id="x_input" name="x_input">
-            {% for column in columns %}
-            <option value="{{ column }}">{{ column }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="y_input">Y Column:</label>
-        <select class="form-control" id="y_input" name="y_input">
-            {% for column in columns %}
-            <option value="{{ column }}">{{ column }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Visualize</button>
-</form>
-
-<!-- Data Preview -->
-<h2>Data Preview</h2>
-<div class="table-responsive">
-    <table id="data-table" class="table table-striped table-bordered">
-        {{ data | safe }}
-    </table>
-</div>
-<hr>
-
-
-<!-- Visualization Display -->
-<h2>Visualization</h2>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            {{ graph_html | safe }}
         </div>
     </div>
 </div>

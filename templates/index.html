@@ -1,7 +1,41 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<h1>Welcome to Data Visualization</h1>
-<p>Upload your CSV file to get started with data visualization.</p>
-<a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload CSV</a>
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to CSV Data Visualization</h1>
+    <p class="lead">Easily upload and visualize your CSV data with our intuitive web application. Whether you need to generate summary statistics, create detailed visualizations, or learn about different types of graphs, we've got you covered.</p>
+    <hr class="my-4">
+    <p>Get started by uploading your CSV file and exploring the data.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('upload_file') }}" role="button">Upload CSV</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Upload CSV</h5>
+                <p class="card-text">Upload your CSV files to start visualizing and analyzing your data.</p>
+                <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Visualize Data</h5>
+                <p class="card-text">Create stunning visualizations to uncover insights and trends in your data.</p>
+                <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Start Visualizing</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Graph Info</h5>
+                <p class="card-text">Learn about different types of graphs and how to use them effectively.</p>
+                <a href="{{ url_for('graph_info') }}" class="btn btn-primary">Learn More</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -10,68 +10,87 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
     <style>
-        body {
-            padding-top: 20px;
-        }
-        .content {
-            margin-top: 20px;
-        }
-        .card {
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-            width: 250px; /* Set a fixed width for the cards */
-            height: 250px; /* Set a fixed height for the cards */
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .card.border-primary {
-            border: 2px solid #007bff;
-        }
-        .card-img-top {
-            width: 100%;
-            height: 150px; /* Set a fixed height for the image to maintain uniformity */
-            object-fit: cover; /* Ensure the image covers the area without distortion */
-        }
+         .table-responsive {
+        height: 400px;
+        overflow-y: auto;
+    }
+    thead th {
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        z-index: 1;
+    }
 
+        body {
+            padding-top: 56px;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #343a40;
+            text-align: center;
+            padding: 10px 0;
+            color: #ffffff;
+        }
+        .content-wrapper {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{{ url_for('index') }}">CSV Data Visualization</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('upload_file') }}">Upload CSV</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('data_alteration', filename='sample.csv') }}">Data Alteration</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('visualize', filename='sample.csv') }}">Visualize Data</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('summary', filename='sample.csv') }}">Summary Statistics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('graph_info') }}">Graph Info</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="content">
-            {% block content %}{% endblock %}
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="{{ url_for('index') }}">CSV Data Visualization</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('upload_file') }}">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('graph_info') }}">Graph Info</a>
+                </li>
+            </ul>
         </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container content-wrapper">
+        {% block content %}{% endblock %}
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">© 2024 CSV Data Visualization. All rights reserved.</span>
+        </div>
+    </footer>
 </body>
 </html>
