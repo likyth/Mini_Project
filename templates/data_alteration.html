@@ -2,15 +2,36 @@
 {% block title %}Data Alteration{% endblock %}
 {% block content %}
 <h1>Data Alteration</h1>
-<form method="post" novalidate>
+<form method="post" class="needs-validation" novalidate>
+    <div class="form-group">
+        <label for="fill_column">Column to Fill Missing Values:</label>
+        <input type="text" class="form-control" id="fill_column" name="fill_column" placeholder="Column name">
+        <div class="invalid-feedback">Please enter a column name.</div>
+    </div>
     <div class="form-group">
         <label for="fill_value">Fill Missing Values:</label>
         <input type="text" class="form-control" id="fill_value" name="fill_value" placeholder="Value to fill missing data">
         <div class="invalid-feedback">Please enter a value.</div>
     </div>
     <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="fill_mean" name="fill_mean">
+        <label class="form-check-label" for="fill_mean">Fill with Mean</label>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="fill_median" name="fill_median">
+        <label class="form-check-label" for="fill_median">Fill with Median</label>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="fill_mode" name="fill_mode">
+        <label class="form-check-label" for="fill_mode">Fill with Mode</label>
+    </div>
+    <div class="form-group form-check">
         <input type="checkbox" class="form-check-input" id="drop_duplicates" name="drop_duplicates">
         <label class="form-check-label" for="drop_duplicates">Remove Duplicates</label>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="normalize" name="normalize">
+        <label class="form-check-label" for="normalize">Normalize Data</label>
     </div>
     <button type="submit" class="btn btn-primary">Apply Changes</button>
 </form>
