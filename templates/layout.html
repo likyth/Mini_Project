@@ -77,7 +77,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('graph_info') }}">Graph Info</a>
                 </li>
-               
+                {% if filename %}
+        <a class="nav-link" href="{{ url_for('summary', filename=filename) }}">Summary</a>
+        <a class="nav-link" href="{{ url_for('data_alteration', filename=filename) }}">Data Alteration</a>
+        {% else %}
+        <a class="nav-link disabled" href="#">Summary</a>
+        <a class="nav-link disabled" href="#">Data Alteration</a>
+        {% endif %}
             </ul>
         </div>
     </nav>

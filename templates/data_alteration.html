@@ -1,41 +1,38 @@
 {% extends "layout.html" %}
 {% block title %}Data Alteration{% endblock %}
 {% block content %}
-<h1>Data Alteration</h1>
-<form method="post" novalidate>
-    <div class="form-group">
-        <label for="fill_value">Fill Missing Values:</label>
-        <input type="text" class="form-control" id="fill_value" name="fill_value" placeholder="Value to fill missing data">
-        <div class="invalid-feedback">Please enter a value.</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Data Alteration</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Alter the data as needed by choosing the appropriate options below:</p>
+                <form method="post" action="{{ url_for('data_alteration', filename=filename) }}">
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="drop_duplicates" name="drop_duplicates">
+                        <label class="form-check-label" for="drop_duplicates">Drop Duplicates</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="fill_value">Fill NA Values</label>
+                        <input type="text" class="form-control" id="fill_value" name="fill_value" placeholder="Enter value to fill NA">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <h2 class="mt-5">Data Preview</h2>
+    <div class="table-responsive">
+        <table id="data-table" class="table table-striped table-bordered">
+            {{ data | safe }}
+        </table>
     </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="drop_duplicates" name="drop_duplicates">
-        <label class="form-check-label" for="drop_duplicates">Remove Duplicates</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Apply Changes</button>
-</form>
-<hr>
 
-<!-- Data Preview -->
-<h2>Data Preview</h2>
-<div class="table-responsive">
-    {{ data | safe }}
+
+
+                <a href="{{ url_for('summary', filename=filename) }}" class="btn btn-secondary mt-3">Back to Summary</a>
+                <a href="{{ url_for('visualize', filename=filename) }}" class="btn btn-primary mt-3">Visualize Data</a>
+            </div>
+        </div>
+    </div>
 </div>
-<script>
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            var forms = document.getElementsByClassName('needs-validation');
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
-</script>
 {% endblock %}

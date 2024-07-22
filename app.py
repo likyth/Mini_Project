@@ -1,11 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory,send_file
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import pandas as pd
 import os
-import seaborn as sns
 from werkzeug.utils import secure_filename
 import plotly.express as px
 import plotly.io as pio
-import matplotlib.pyplot as plt
 from time import time 
 
 app = Flask(__name__,static_url_path='/static')
@@ -25,45 +23,20 @@ def read_csv_file(filepath):
 
 @app.route('/summary/<filename>')
 def summary(filename):
-    # Ensure the file is allowed (based on its extension)
-    if not allowed_file(filename):
-        return redirect(url_for('index', error='Invalid file type'))
-
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    
-    # Check if the file exists
     if not os.path.exists(filepath):
         return redirect(url_for('index', error='File not found'))
-
-    # Attempt to read the CSV file
-    try:
-        data = read_csv_file(filepath)
-    except Exception as e:
-        # Handle file reading errors
-        return redirect(url_for('index', error='Error reading file: ' + str(e)))
-
-    # Proceed with generating summary statistics, visualizations, etc.
-    # Make sure to end with a return statement that returns a valid response,
-    # such as render_template or send_file.
-    
-    # Example:
+    data = read_csv_file(filepath)
     summary_stats = data.describe().to_html(classes='table table-striped table-bordered')
-    return render_template('summary.html', summary_stats=summary_stats)
-
-# Ensure the read_csv_file function also ends with a return statement
-def read_csv_file(filepath):
-    try:
-        return pd.read_csv(filepath)
-    except UnicodeDecodeError as e:
-        # Handle specific exceptions or return a default value
-        return pd.DataFrame()  # Return an empty DataFrame or handle as needed
+    return render_template('summary.html', summary_stats=summary_stats, filename=filename)
 
 
 
-@app.route('/dashboard')
-def dashboard():
-    # Your dashboard logic here
-    return render_template('dashboard.html')
+
+@app.route('/dashboard/<filename>')
+def dashboard(filename):
+    # Your dashboard logic with filename here
+    return render_template('dashboard.html', filename=filename)
 
 
 @app.route('/some-route')
@@ -77,20 +50,21 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # Check if the post request has the file part
         if 'file' not in request.files:
+            print("No file part")
             return redirect(request.url)
         file = request.files['file']
-        # If user does not select file, browser also
-        # submit an empty part without filename
         if file.filename == '':
+            print("No selected file")
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
+            print(f"File uploaded successfully: {filename}")
             return redirect(url_for('visualize', filename=filename))
     return render_template('upload.html')
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
